@@ -1,26 +1,40 @@
 {{-- resources/views/posts/index.blade.php --}}
-@extends('layout')
-
-@section('title')
-   Visi įrašai
-@endsection
+@extends('layouts.app')
 
 @section('content')
-    cia bus visi įrašai<br><br>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">Posts</div>
 
-    siandien yra {{ $todayDate }}
+                    <div class="card-body">
+                        @if (session('message'))
+                            <div class="alert alert-success">
+                                {{ session('message') }}
+                            </div>
+                        @endif
 
-    @foreach ($posts as $post)
-        <h1>
-            <a href="{{ url('posts/' . $post->id) }}">
-                {{ $post->title }}
-            </a>
-        </h1>
+                        siandien yra {{ $todayDate }}
 
-        <p>
-            {{ $post->content }}
-        </p>
-    @endforeach
+                        @foreach ($posts as $post)
+                            <h1>
+                                <a href="{{ url('posts/' . $post->id) }}">
+                                    {{ $post->title }}
+                                </a>
+                            </h1>
+
+                            <p>
+                                {{ $post->content }}
+                            </p>
+                        @endforeach
+
+                        {{ $posts->links() }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 {{-- tokia yra blade komentaru sintakse --}}

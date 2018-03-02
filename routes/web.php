@@ -19,25 +19,37 @@ Route::get('/justinas', function() {
     echo 'labas, Justinai';
 });
 
-Route::get('/posts', 'PostsController@index');
 
-Route::get('/posts/{id}', 'PostsController@single')
-     ->where('id', '[0-9]+');
+Route::prefix('posts')->group(function () {
+    Route::get('/', 'PostsController@index');
 
-Route::get('/posts/create', 'PostsController@create');
+    Route::get('{id}', 'PostsController@single')
+         ->where('id', '[0-9]+');
 
-Route::post('/posts', 'PostsController@store');
+    Route::get('create', 'PostsController@create');
 
-Route::get('/posts/edit/{id}', 'PostsController@edit')
-     ->where('id', '[0-9]+');
+    Route::post('/', 'PostsController@store');
 
-Route::put('/posts/{id}', 'PostsController@update')
-     ->where('id', '[0-9]+');
+    Route::get('edit/{id}', 'PostsController@edit')
+         ->where('id', '[0-9]+');
 
-Route::delete('/posts/{id}', 'PostsController@destroy')
-     ->where('id', '[0-9]+');
+    Route::put('{id}', 'PostsController@update')
+         ->where('id', '[0-9]+');
+
+    Route::delete('{id}', 'PostsController@destroy')
+         ->where('id', '[0-9]+');
+});
+
+Route::resource('products', 'ProductController');
+
+Route::get('/alkoholis', function() {
+    echo 'alkoholio skyrius';
+})->middleware('age');
 
 
 
 
 
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

@@ -23,9 +23,7 @@ class PostsController extends Controller
 //        $query = DB::table('posts'); // `SELECT * FROM posts`
 //        $posts = $query->get();
 
-        $posts = Post::all();
-
-
+        $posts = Post::paginate(3);
 
         // SELECT * FROM posts ORDER BY id DESC
         // SELECT * FROM posts ORDER BY id DESC LIMIT 10
@@ -47,12 +45,6 @@ class PostsController extends Controller
 
     public function single($id)
     {
-//        $post = DB::table('posts')->find($id);
-//
-//        if ($post == null) {
-//            abort(404);
-//        }
-
         $post = Post::findOrFail($id);
 
         // SELECT * FROM posts WHERE id = $id
@@ -67,17 +59,11 @@ class PostsController extends Controller
 
     public function store(PostRequest $request)
     {
-        $data = request()->input();
-
-        unset($data['_token']);
-
-//        DB::table('posts')->insert($data);
-
         $post = new Post();
-        $post->title = $data['title'];
-        $post->content = $data['content'];
-        $post->author = $data['author'];
-        $post->draft = $data['draft'];
+        $post->title = $request->input('title');
+        $post->content = $request->input('content');
+        $post->author = $request->input('author');
+        $post->draft = $request->input('draft');
 
         $post->save();
 
@@ -93,15 +79,9 @@ class PostsController extends Controller
 
     public function update(PostRequest $request, $id)
     {
-        $data = request()->input();
-
-        unset($data['_token'], $data['_method']);
-
-//        DB::table('posts')->where('id', $id)->update($data);
-
         $post = Post::findOrFail($id);
 
-        $post->fill($data);
+        $post->fill($request->input());
         $post->save();
 
         return redirect('/posts/' . $id)->with('message', 'Įrašas sėkmingai atnaujintas');
@@ -109,16 +89,12 @@ class PostsController extends Controller
 
     public function destroy($id)
     {
-//        DB::table('posts')->where('id', $id)->delete();
-
         // 1 budas
         $post = Post::findOrFail($id);
         $post->delete();
 
         // 2 budas
 //        Post::destroy($id);
-
-        // DELETE FROM posts WHERE id = $id
 
         return redirect('/posts')->with('message', 'Įrašas sėkmingai ištrintas');
     }

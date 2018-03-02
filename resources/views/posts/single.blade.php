@@ -1,22 +1,30 @@
 {{-- resources/views/posts/single.blade.php --}}
-@extends('layout')
-
-@section('title')
-    {{ $post->title }}
-@endsection
+@extends('layouts.app')
 
 @section('content')
-    <h1>{{ $post->title }} {{ $post->id }}</h1>
-    <p>
-        {{ $post->content }}
-    </p>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">Posts</div>
 
-    <a href="{{ url('posts/edit/' . $post->id) }}">Redaguoti</a>
+                    <div class="card-body">
+                        <h1>{{ $post->title }} {{ $post->id }}</h1>
+                        <p>
+                            {{ $post->content }}
+                        </p>
 
-    <form action="{{ url('posts/' . $post->id) }}" method="POST">
-        @csrf()
-        @method('DELETE')
+                        <a href="{{ url('posts/edit/' . $post->id) }}">Redaguoti</a>
 
-        <button type="submit">Ištrinti</button>
-    </form>
+                        <form action="{{ url('posts/' . $post->id) }}" method="POST">
+                            @csrf()
+                            @method('DELETE')
+
+                            <button type="submit">Ištrinti</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
