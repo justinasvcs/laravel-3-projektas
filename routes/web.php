@@ -42,9 +42,11 @@ Route::prefix('posts')->group(function () {
 
 Route::resource('products', 'ProductController');
 
-Route::get('/alkoholis', function() {
-    echo 'alkoholio skyrius';
-})->middleware('age');
+Route::get('/testas', function() {
+    $user = \User::find(1);
+
+    dd($user);
+});
 
 
 

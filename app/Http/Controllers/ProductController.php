@@ -14,7 +14,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        echo 'čia bus produktai';
+        $products = Product::paginate(10);
+
+        return view('products.index')->with('products', $products);
     }
 
     /**
@@ -35,7 +37,27 @@ class ProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // 1. vykdoma validacija
+        $request->validate([
+            'title' => 'required',
+            'price' => 'required',
+            'count' => 'required',
+            'photo_path' => 'required'
+        ]); // TODO: įsivesti papildomas taisykles pagal kiekvieną laukelio tipą
+
+        $data = $request->input();
+
+        // 2. išsaugomas įrašas
+        $data['photo_path'] = $request->file('photo_path')->store('public/products');
+
+//        \Debugbar::info($data);
+
+        Product::create($data);
+
+        // 3. daromas nukreipimas į visų produktų puslapį
+        // TODO: prikabinti sesijos žinutę apie sėkmingai išsaugotą įrašą
+
+        return redirect()->route('products.index');
     }
 
     /**
