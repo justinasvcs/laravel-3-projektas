@@ -33,9 +33,15 @@
                                 <td>{{ $product->count  }}</td>
                                 <td>
                                     {{-- TODO: mygtukas "Redaguoti" --}}
-
+                                    <a class="btn  btn-secondary" href="{{ route('products.edit', $product->id) }}">Redaguoti</a>
 
                                     {{-- TODO: mygtukas "Trinti" --}}
+                                    <form action="{{ route('products.destroy', $product->id) }}" method="POST">
+                                        @csrf()
+                                        @method('DELETE')
+
+                                        <button class="btn  btn-danger" type="submit">Trinti</button>
+                                    </form>
                                 </td>
                             </tr>
                             @endforeach

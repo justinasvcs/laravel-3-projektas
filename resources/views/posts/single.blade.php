@@ -14,6 +14,20 @@
                             {{ $post->content }}
                         </p>
 
+                        <p>
+                            Vartotojas: {{ $post->user->email }}
+                        </p>
+
+                        <p>
+                            Susiję produktai:
+
+                            <ul>
+                            @foreach($post->products as $product)
+                                <li>{{ $product->title }}</li>
+                            @endforeach
+                            </ul>
+                        </p>
+
                         <a href="{{ url('posts/edit/' . $post->id) }}">Redaguoti</a>
 
                         <form action="{{ url('posts/' . $post->id) }}" method="POST">

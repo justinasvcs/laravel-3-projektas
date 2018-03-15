@@ -7,6 +7,7 @@ use DB;
 use App\Http\Requests\PostRequest;
 
 use App\Post;
+use Auth;
 
 class PostsController extends Controller
 {
@@ -23,7 +24,10 @@ class PostsController extends Controller
 //        $query = DB::table('posts'); // `SELECT * FROM posts`
 //        $posts = $query->get();
 
-        $posts = Post::paginate(3);
+        $user = Auth::user('email');
+        $posts = $user->posts()->paginate(3);
+
+//        $posts = Post::paginate(3);
 
         // SELECT * FROM posts ORDER BY id DESC
         // SELECT * FROM posts ORDER BY id DESC LIMIT 10
@@ -54,7 +58,9 @@ class PostsController extends Controller
 
     public function create()
     {
-        return view('posts.create');
+        $data = \App\Product::all();
+
+        return view('posts.create')->with('products', $data);
     }
 
     public function store(PostRequest $request)
@@ -64,8 +70,17 @@ class PostsController extends Controller
         $post->content = $request->input('content');
         $post->author = $request->input('author');
         $post->draft = $request->input('draft');
+//        $post->user_id = Auth::id();
 
-        $post->save();
+        // TODO: išsaugoti relationshipą naudodamas
+        // User objektą
+        // Auth::user()
+
+        $user = Auth::user();
+        $post = $user->posts()->save($post);
+
+        $post->products()->attach($request->input('products'));
+        // update atveju naudojamas "sync" vietoje "attach"
 
         return redirect('/posts')->with('message', 'Įrašas sėkmingai išsaugotas!');
     }
